@@ -12,10 +12,10 @@ function init() {
     width: 800,
     height: 600,
     autoHideMenuBar: true,
-    title: data.name || "Electrify",
+    title: data?.name || "Electrify",
   }).loadURL(url)
 }
-
+// dick
 app.whenReady().then(() => {
   init();
 
