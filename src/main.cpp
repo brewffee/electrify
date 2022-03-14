@@ -3,10 +3,10 @@
 
 using namespace std;
 
-int main()
-{
+int getInput() { 
   ofstream dest;
   string input, platform, install;
+
   dest.open("data.json");
 
   dest << "{\"name\":\"";
@@ -22,6 +22,7 @@ int main()
   cout << "Platform: "; getline(cin, input);
   if (input != "windows" && input != "linux") {
     cout << "Invalid platform.\n";
+    dest << "\"}";
     return 1;
   } else if (input == "mac") {
     cout << "Mac is not supported.\n";
@@ -61,7 +62,16 @@ int main()
   }
 
   dest.close();
+  return 0;
+}
 
+int main() {
+  getInput();
+  // writeJSON();
+
+  // we'll need to rewrite getInput() to give us the
+  // variables we need to later create the json file and 
+  // create the shortcuts and such.
   system("npm run start");
   return 0;
 }
