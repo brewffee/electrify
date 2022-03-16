@@ -6,6 +6,16 @@
 using json = nlohmann::json;
 using namespace std;
 
+string getOS() {
+  #ifdef _WIN32 || _WIN64
+    return "windows";
+  #elif __APPLE__ || __MACH__
+    return "mac";
+  #elif __linux__
+    return "linux";
+  #endif
+}
+
 map<string, json> getInput() {
   // Same as getInput, but save variables locally first
   string name, description, url, platform, install, win_startmenu, linux_applications, desktop;
@@ -14,11 +24,6 @@ map<string, json> getInput() {
   cout << "Description: "; getline(cin, description);
   cout << "URL: "; getline(cin, url);
   cout << "Platform: "; getline(cin, platform);
-
-  // should i first ask if this app
-  // is for the user's pc or if 
-  // they're creating this for a
-  // different platform?
 
   if (platform != "windows" && platform != "linux") {
     cout << "Invalid platform.\n"; 
@@ -31,30 +36,35 @@ map<string, json> getInput() {
     return {};
   }
 
-  cout << "Would you like to install this as an app? (y/n): "; getline(cin, install);
-  if (install == "y") install = "true";
-  else install = "false";
+  // check if platform is equal to current os
+  if (platform == getOS()) {
+    cout << "Would you like to install this as an app? (y/n): "; getline(cin, install);
+    if (install == "y") install = "true";
+    else install = "false";
 
-  // optional questions
-  if (install == "true") {
-    if (platform == "windows") {
-      cout << "Would you like to add this to the start menu? (y/n): "; getline(cin, win_startmenu);
-    } else if (platform == "linux") {
-      cout << "Would you like to add this to /usr/share/applications? (y/n): "; getline(cin, linux_applications);
-    } 
-    if (win_startmenu == "y") {
-      win_startmenu = "true";
-    } else {
-      win_startmenu = "false";
+    // optional questions
+    if (install == "true") {
+      if (platform == "windows") {
+        cout << "Would you like to add this to the start menu? (y/n): "; getline(cin, win_startmenu);
+      } else if (platform == "linux") {
+        cout << "Would you like to add this to /usr/share/applications? (y/n): "; getline(cin, linux_applications);
+      } 
+      if (win_startmenu == "y") {
+        win_startmenu = "true";
+      } else {
+        win_startmenu = "false";
+      }
+      cout << "Would you like to add this to the desktop? (y/n): "; getline(cin, desktop);
+      if (desktop == "y") {
+        desktop = "true";
+      } else {
+        desktop = "false";
+      }
     }
-    cout << "Would you like to add this to the desktop? (y/n): "; getline(cin, desktop);
-    if (desktop == "y") {
-      desktop = "true";
-    } else {
-      desktop = "false";
-    }
+  } else {
+    install = "false";
   }
-
+  
   // now let's return this data as an object
   json j;
 
