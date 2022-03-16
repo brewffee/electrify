@@ -1,0 +1,7 @@
+{
+    "name": "My Example App",
+    "description": "This is a description.",
+    "url": "https://github.com/geixco/electrify",
+    "platform": "linux",
+    "install": "false"
+}
