@@ -78,14 +78,12 @@ void writeJSON(map<string, json> data) {
   dest.open("data.json");
 
   // make our json pretty while we're at it
-  dest << std::setw(4) << data << endl;
+  dest << setw(4) << data << endl;
   dest.close();
   return;
 }
 
 int main() {
-  // maybe have gui flag sometime? :eyes:
-
   json data = getInput();
 
   if (data.empty()) {
@@ -103,8 +101,8 @@ int main() {
   // and management, unless they're
   // exporting for a different platform
 
-  // if (data.export == "true") {
-  //   track the app
+  // if (data.install == "true") {
+  //   track the app 
   // }
 
   // just an idea, might change later
