@@ -20,6 +20,12 @@ map<string, json> getInput() {
   // Same as getInput, but save variables locally first
   string name, description, url, platform, install, /*win_startmenu,*/ linux_applications, desktop;
 
+  // warning for unsupported platforms
+  if (getOS() == "windows" || getOS() == "mac") {
+    cout << "\e[1mWarning: Creating applications for " << getOS() << " is not supported yet.\n";
+    cout << "\e[1mIf you would like to recieve support for your platform sooner, please help us by contributing to the project on GitHub.\n\n\e[0m"; 
+  }
+
   // restyle these questions
   cout << "Name: "; getline(cin, name);
   cout << "Description: "; getline(cin, description);
