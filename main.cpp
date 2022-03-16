@@ -7,9 +7,9 @@ using json = nlohmann::json;
 using namespace std;
 
 string getOS() {
-  #ifdef _WIN32 || _WIN64
+  #if defined(_WIN32) || defined(_WIN64)
     return "windows";
-  #elif __APPLE__ || __MACH__
+  #elif defined(__APPLE__) || defined(__MACH__)
     return "mac";
   #elif __linux__
     return "linux";
@@ -17,7 +17,6 @@ string getOS() {
 }
 
 map<string, json> getInput() {
-  // Same as getInput, but save variables locally first
   string name, description, url, platform, install, /*win_startmenu,*/ linux_applications, desktop;
 
   // warning for unsupported platforms
