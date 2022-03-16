@@ -18,23 +18,22 @@ string getOS() {
 
 map<string, json> getInput() {
   // Same as getInput, but save variables locally first
-  string name, description, url, platform, install, win_startmenu, linux_applications, desktop;
+  string name, description, url, platform, install, /*win_startmenu,*/ linux_applications, desktop;
 
+  // restyle these questions
   cout << "Name: "; getline(cin, name);
   cout << "Description: "; getline(cin, description);
   cout << "URL: "; getline(cin, url);
   cout << "Platform: "; getline(cin, platform);
 
-  if (platform != "windows" && platform != "linux") {
+  if (platform == "mac" || platform == "windows") {
+    // {platform} is not supported
+    cout << "The selected platform '" << platform << "' is not supported.\n";
+    return {};
+  } else if (platform != "linux") {
     cout << "Invalid platform.\n"; 
     return {};
-  } else if (platform == "mac") {
-    // windows will probably also be
-    // unsupported for the time being,
-    // as i'm developing this for linux
-    cout << "Mac is not supported.\n";
-    return {};
-  }
+  } 
 
   // check if platform is equal to current os
   if (platform == getOS()) {
@@ -44,16 +43,16 @@ map<string, json> getInput() {
 
     // optional questions
     if (install == "true") {
-      if (platform == "windows") {
+      /*if (platform == "windows") {
         cout << "Would you like to add this to the start menu? (y/n): "; getline(cin, win_startmenu);
-      } else if (platform == "linux") {
+      } else*/ if (platform == "linux") {
         cout << "Would you like to add this to /usr/share/applications? (y/n): "; getline(cin, linux_applications);
       } 
-      if (win_startmenu == "y") {
+      /*if (win_startmenu == "y") {
         win_startmenu = "true";
       } else {
         win_startmenu = "false";
-      }
+      }*/
       cout << "Would you like to add this to the desktop? (y/n): "; getline(cin, desktop);
       if (desktop == "y") {
         desktop = "true";
@@ -64,7 +63,7 @@ map<string, json> getInput() {
   } else {
     install = "false";
   }
-  
+
   // now let's return this data as an object
   json j;
 
@@ -75,7 +74,8 @@ map<string, json> getInput() {
   j["platform"] = platform;
   j["install"] = install;
   if (install == "true") {
-    j["start"] = win_startmenu;
+    /*j["start"] = win_startmenu;*/
+    j["appmenu"] = linux_applications;
     j["desktop"] = desktop;
   }
 
