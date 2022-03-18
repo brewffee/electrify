@@ -87,10 +87,10 @@ map<string, json> getInput() {
   return j;
 }
 
-void writeJSON(map<string, json> data) {
+void writeJSON(map<string, json> data, string name) {
   // create our json file :)
   ofstream dest;
-  dest.open("data.json");
+  dest.open(name + ".json");
 
   // make our json pretty while we're at it
   dest << setw(4) << data << endl;
@@ -107,7 +107,8 @@ int main() {
     return 1;
   }
 
-  writeJSON(data);
+  writeJSON(data, "data");
+  time_t curTime = time(NULL);
 
   // we'll also write to the user's 
   // appdata / .local folder later,
@@ -116,26 +117,39 @@ int main() {
   // and management, unless they're
   // exporting for a different platform
 
-  // if (data.install == "true") {
-  //   track the app 
-  // }
+  if (data["install"] == "true") {
+    string name = data["name"];
+    string platform = data["platform"];
+    string dest = "~/.local/share/electrify/apps/" + name + "-" + platform + "_" + to_string(curTime) + "/";
 
-  // just an idea, might change later
-  // localFolder/electrify/apps/appName/data.json
-  //
-  // {
-  //   name: "",
-  //   description: "",
-  //   path: "",
-  //   installed_at: "",
-  // }
+    if (getOS() == "linux") {
+      system(("mkdir -p " + dest).c_str());
+    }
+
+    // write the data file
+    json config;
+
+    config["name"] = name;
+    config["description"] = data["description"];
+
+    if (getOS() == "linux") {
+      config["appmenu"] = data["appmenu"];
+    } /*else if (getOS() == "windows") {
+      config["start"] = data["start"];
+    }*/
+
+    config["desktop"] = data["desktop"];
+    config["installed"] = to_string(curTime);
+
+    writeJSON(config, dest + "config");
+
+    // here we'll create shortcuts,
+    // move em in the right places,
+    // and bam! we're done! :D
+  }
 
   // for testing the newly created data:
   system("npm run start");
-
-  // here we'll create shortcuts,
-  // move em in the right places,
-  // and bam! we're done! :D
 
   return 0;
 }
