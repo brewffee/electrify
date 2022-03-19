@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-// need the `nlohmann-json-git` package for this lol
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -25,14 +24,13 @@ map<string, json> getInput() {
     cout << "\e[1mIf you would like to recieve support for your platform sooner, please help us by contributing to the project on GitHub.\n\n\e[0m"; 
   }
 
-  // restyle these questions
-  cout << "Name: "; getline(cin, name);
-  cout << "Description: "; getline(cin, description);
-  cout << "URL: "; getline(cin, url);
-  cout << "Platform: "; getline(cin, platform);
+  // add handling for required fields and default values
+  cout << "What is the name of the application? (default: \"Electrify-App\")\n > "; getline(cin, name);
+  cout << "What is the description of the application? (default: blank)\n > "; getline(cin, description);
+  cout << "Enter the desired URL (required)\n > "; getline(cin, url);
+  cout << "What is the target platform of the application? (default: " << getOS() << ")\n > "; getline(cin, platform);
 
   if (platform == "mac" || platform == "windows") {
-    // {platform} is not supported
     cout << "The selected platform '" << platform << "' is not supported.\n";
     return {};
   } else if (platform != "linux") {
@@ -40,25 +38,25 @@ map<string, json> getInput() {
     return {};
   } 
 
-  // check if platform is equal to current os
+  // installation only for matching platforms
   if (platform == getOS()) {
-    cout << "Would you like to install this as an app? (y/n): "; getline(cin, install);
+    cout << "Would you like to install this as an app? (y/n)\n > "; getline(cin, install);
     if (install == "y") install = "true";
     else install = "false";
 
     // optional questions
     if (install == "true") {
       /*if (platform == "windows") {
-        cout << "Would you like to add this to the start menu? (y/n): "; getline(cin, win_startmenu);
+        cout << "Would you like to add this to the start menu? (y/n)\n > "; getline(cin, win_startmenu);
       } else*/ if (platform == "linux") {
-        cout << "Would you like to add this to /usr/share/applications? (y/n): "; getline(cin, linux_applications);
+        cout << "Would you like to add this to /usr/share/applications? (y/n)\n > "; getline(cin, linux_applications);
       } 
       /*if (win_startmenu == "y") {
         win_startmenu = "true";
       } else {
         win_startmenu = "false";
       }*/
-      cout << "Would you like to add this to the desktop? (y/n): "; getline(cin, desktop);
+      cout << "Would you like to add this to the desktop? (y/n)\n > "; getline(cin, desktop);
       if (desktop == "y") {
         desktop = "true";
       } else {
@@ -98,7 +96,10 @@ void writeJSON(map<string, json> data, string name) {
   return;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+  // load data from local folder
+  // then begin to handle arguments
+
   json data = getInput();
 
   if (data.empty()) {
@@ -110,12 +111,9 @@ int main() {
   writeJSON(data, "data");
   time_t curTime = time(NULL);
 
-  // we'll also write to the user's 
-  // appdata / .local folder later,
-  // keeping track of all of their 
-  // electrify apps for easy access
-  // and management, unless they're
-  // exporting for a different platform
+  // create a local folder to store
+  // app configs, allowing for easy
+  // management (like uninstallation)
 
   if (data["install"] == "true") {
     string name = data["name"];
