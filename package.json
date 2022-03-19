@@ -4,7 +4,7 @@
     "description": "Converts any website into an electron application.",
     "main": "app.js",
     "scripts": {
-        "start": "tsc && electron-forge start",
+        "start": "electron-forge start",
         "package": "electron-forge package",
         "main": "g++ main.cpp -o main && \"/home/geixcowo/db/electrify/\"main "
     },
