@@ -9,8 +9,9 @@ interface AppData {
   url: string;
   platform: "windows" | "linux" | "mac";
   install: "true" | "false";
-  start: "true" | "false";
-  desktop: "true" | "false";
+  start?: "true" | "false";
+  appmenu?: "true" | "false";
+  desktop?: "true" | "false";
 }
 
 const data = json as AppData;
