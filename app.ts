@@ -1,7 +1,4 @@
-import { exec } from 'child_process';
 import { app, BrowserWindow } from 'electron';
-
-import * as json from './data.json';
 
 interface AppData {
   name: string;
@@ -13,6 +10,8 @@ interface AppData {
   appmenu?: "true" | "false";
   desktop?: "true" | "false";
 }
+
+import * as json from './data.json';
 
 const data = json as AppData;
 

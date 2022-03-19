@@ -1,5 +1,6 @@
 out
 .vscode
 node_modules
+index.js
 app.js
 main
