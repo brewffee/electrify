@@ -99,6 +99,11 @@ void writeJSON(map<string, json> data, string name) {
 int main(int argc, char *argv[]) {
   // load data from local folder
   // then begin to handle arguments
+  
+  // log args
+  for (int i = 1; i < argc; i++) {
+    cout << "argv[" << i << "]: " << argv[i] << endl;
+  }
 
   json data = getInput();
 
